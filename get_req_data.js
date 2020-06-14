@@ -9,44 +9,42 @@ function getRequestString(peopleCount, daysLength, startDate, minorPermit) {
     return payload;
   }
   
-  function getTicketId(date, productId) {
-      var ticketElem = this.eraluvat.STORE.CALENDAR_DATA[productId].find(elem => isSameDate(elem, date));
-      return ticketElem[date][0].id;
-  }
-  
-  function isSameDate(listElem, date) {
-      var dateStr = Object.keys(listElem)[0];
-      return dateStr == date;
-  }
-  
-  function getDayInfo(doneFunc) {
-      var i = eraluvat.app.functions.getFajaxURL({
-          slots: 100,
-          beginDate: new Date(2020, 7),
-          productIDArr: [$("section.product-list-item.product-form").data("product")]
-      });
-      $.getJSON(i, function(e) {
-          eraluvat.STORE.CALENDAR_DATA = e;
-            doneFunc();
-      });
-  }
-  
-  function modifiedAddToCart(e) {
-      var t = $(this);
-      var successFunc = (data, textStatus, jqXHR) => {
-          // console.log(data)
-          // console.log(textStatus)
-          // console.log(jqXHR)
-          eraluvat.app.functions.showDialog(data.html.modal);
-      }
-      t.addClass("disabled").attr("disabled", "disabled"); 
-      return $.ajax({ url: "cart/add?ajax=1&include[modal]=add2cart_done", data: e, dataType: "json", type: "POST", success: successFunc})
-  }
-  
-  function reserve() {
-      getDayInfo(() => {
-          modifiedAddToCart(getRequestString(1, 5, new Date(Date.UTC(2020, 8, 15)), false));
-      });
-  }
-  
-  reserve();
+function getTicketId(date, productId) {
+    var ticketElem = this.eraluvat.STORE.CALENDAR_DATA[productId].find(elem => isSameDate(elem, date));
+    return ticketElem[date][0].id;
+}
+
+function isSameDate(listElem, date) {
+    var dateStr = Object.keys(listElem)[0];
+    return dateStr == date;
+}
+
+function getDayInfo(doneFunc) {
+    var i = eraluvat.app.functions.getFajaxURL({
+        slots: 100,
+        beginDate: new Date(2020, 7),
+        productIDArr: [$("section.product-list-item.product-form").data("product")]
+    });
+    $.getJSON(i, function(e) {
+        eraluvat.STORE.CALENDAR_DATA = e;
+        doneFunc();
+    });
+}
+
+function modifiedAddToCart(e) {
+    var t = $(this);
+    var successFunc = (data, textStatus, jqXHR) => {
+        // console.log(data)
+        // console.log(textStatus)
+        // console.log(jqXHR)
+        eraluvat.app.functions.showDialog(data.html.modal);
+    }
+    t.addClass("disabled").attr("disabled", "disabled"); 
+    return $.ajax({ url: "cart/add?ajax=1&include[modal]=add2cart_done", data: e, dataType: "json", type: "POST", success: successFunc})
+}
+
+function reserve() {
+    getDayInfo(() => {
+        modifiedAddToCart(getRequestString(1, 5, new Date(Date.UTC(2020, 8, 15)), false));
+    });
+}
