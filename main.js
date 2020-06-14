@@ -39,9 +39,6 @@ function toBeRunInPageContext () {
     function modifiedAddToCart(e) {
         var t = $(this);
         var successFunc = (data, textStatus, jqXHR) => {
-            // console.log(data)
-            // console.log(textStatus)
-            // console.log(jqXHR)
             this.eraluvat.app.functions.showDialog(data.html.modal);
         }
         t.addClass("disabled").attr("disabled", "disabled"); 
@@ -49,11 +46,6 @@ function toBeRunInPageContext () {
     }
 
     function reserve() {
-        console.log("in reserve!");
-        console.log(this.window);
-        console.log(this.eraluvat);
-        console.log($("section.product-list-item.product-form").data("product"))
-        
         function doneFunc() {
             modifiedAddToCart(getRequestString(1, 5, new Date(Date.UTC(2020, 8, 15)), false));
         }
