@@ -1,0 +1,22 @@
+{
+
+    "manifest_version": 2,
+    "name": "Test Extension lmao",
+    "version": "1.0",
+  
+    "description": "",
+  
+    "icons": {
+      "48": "icons/border-48.png"
+    },
+
+    "permissions": ["storage"],
+  
+    "content_scripts": [
+      {
+        "matches": ["*://verkkokauppa.eraluvat.fi/*"],
+        "js": ["main.js"]
+      }
+    ]
+  
+  }
