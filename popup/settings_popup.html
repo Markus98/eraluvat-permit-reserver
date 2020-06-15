@@ -2,16 +2,51 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <style>
+            .dateElem {
+                display: inline;
+            }
+            .minorElem {
+                display: inline;
+            }
+            .toggleElem {
+                display: inline;
+            }
+            .error {
+                background-color: rgb(255, 72, 72);
+            }
+            .toggledOff {
+                color: red;
+            }
+            .toggledOn {
+                color: green;
+            }
+        </style>
     </head>
     <body>
         <span>date: </span>
-        <input type="date" id="startTimeInput">
+        <div class="dateElem">
+            <span>day: </span>
+            <input type="number" id="startTimeDayInput" min="1" max="31">
+            <span>month: </span>
+            <input type="number" id="startTimeMonthInput" min="1" max = "12">
+            <span>year: </span>
+            <input type="number" id="startTimeYearInput">
+        </div>
         <span>days: </span>
-        <input type="number" id="daysInput">
+        <input class="dateInput" type="number" id="daysInput" min="1" max="7">
         <span>people amount: </span>
-        <input type="number" id="peopleInput">
-        <span>minor ticket: </span>
-        <input type="checkbox" id="minorInput">
+        <input type="number" id="peopleInput" min="1">
+        <div class="minorElem">
+            <span>minor ticket: </span>
+            <input type="checkbox" id="minorInput">
+        </div>
+        <div class="toggleElem">
+            <button id="onButton">on</button>
+            <button id="offButton">off</button>
+            <span> Currrent status: </span>
+            <span id="statusText">off</span>
+        </div>
         <script src="popup.js"></script>
     </body>
 </html>
