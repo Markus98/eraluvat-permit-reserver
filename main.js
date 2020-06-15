@@ -25,7 +25,7 @@ function toBeRunInPageContext () {
     function getDayInfo(doneFunc) {
         var i = this.eraluvat.app.functions.getFajaxURL({
             slots: 100,
-            beginDate: new Date(2020, 7),
+            beginDate: new Date(Date.UTC(2020, 7)),
             productIDArr: [$("section.product-list-item.product-form").data("product")]
         });
         function jsonFunc(e) {

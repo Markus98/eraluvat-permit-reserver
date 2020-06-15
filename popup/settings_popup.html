@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <meta charset="UTF-8">
+    </head>
     <body>
         <span>date: </span>
-        <input type="date" id="startTimeInput" onchange="onDateChange()">
-        <input type="text" id="texttest">
+        <input type="date" id="startTimeInput">
+        <span>days: </span>
+        <input type="number" id="daysInput">
+        <span>people amount: </span>
+        <input type="number" id="peopleInput">
+        <span>minor ticket: </span>
+        <input type="checkbox" id="minorInput">
+        <script src="popup.js"></script>
     </body>
-    <script>
-        var dateinput = document.getElementById("startTimeInput");
-        var testinput = document.getElementById("texttest");
-        
-        function onDateChange() {
-            testinput.textContent = "test"
-        }
-    </script>
 </html>
