@@ -103,5 +103,5 @@ function onPageLoad() {
 }
 // Run script after page has loaded.
 window.addEventListener('load', onPageLoad);
-// In case the 'load' even isn't emitted, also set a timer
+// In case the 'load' event isn't emitted, also set a timer
 setTimeout(onPageLoad, 1000);

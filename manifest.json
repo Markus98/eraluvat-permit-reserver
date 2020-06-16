@@ -4,7 +4,7 @@
     "name": "Eräluvat Permit Reserver",
     "version": "1.0",
   
-    "description": "",
+    "description": "Automatically reserves permits on the eraluvat.fi webstore on browser refresh.",
   
     "icons": {
       "48": "icons/border-48.png"
