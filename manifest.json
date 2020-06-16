@@ -14,7 +14,7 @@
       "default_icon": {
         "48": "icons/border-48.png"
       },
-      "default_title": "Eräluvat reservation automation configuration",
+      "default_title": "Eräluvat reserver configuration",
       "default_popup": "popup/settings_popup.html",
       "browser_style": true
     },

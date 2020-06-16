@@ -17,14 +17,18 @@ var statusText = document.getElementById("statusText");
 var onButton = document.getElementById("onButton");
 var offButton = document.getElementById("offButton");
 
+var settingsVerifiedAsValid = false;
+
 onButton.addEventListener("click", toggleOn);
 offButton.addEventListener("click", toggleOff);
 
 function onSettingChange() {
     if (isValidDate(dateDayInput.value, dateMonthInput.value, dateYearInput.value)) {
-        browser.storage.local.set({"startDay": dateDayInput.value});
-        browser.storage.local.set({"startMonth": dateMonthInput.value});
-        browser.storage.local.set({"startYear": dateYearInput.value});
+        browser.storage.local.set({
+            "startDay": dateDayInput.value,
+            "startMonth": dateMonthInput.value,
+            "startYear": dateYearInput.value
+        });
         dateDayInput.className = "numberElem"
         dateMonthInput.className = "numberElem"
         dateYearInput.className = "numberElem"
@@ -33,11 +37,13 @@ function onSettingChange() {
         dateMonthInput.className = "error numberElem"
         dateYearInput.className = "error numberElem"
     }
-
-    browser.storage.local.set({"days": daysInput.value});
-    browser.storage.local.set({"people": peopleInput.value});
-    browser.storage.local.set({"minor": minorInput.checked});
-    browser.storage.local.get().then(o => console.log(o));
+    browser.storage.local.set({
+        "days": daysInput.value,
+        "people": peopleInput.value,
+        "minor": minorInput.checked
+    });
+    
+    validateInputs();
 }
 
 function isValidDate(day, month, year) {
@@ -45,28 +51,31 @@ function isValidDate(day, month, year) {
     return !isNaN(testDate.valueOf());
 }
 
-function isValid() {
-    return inputIsSameAsMemory();
-}
-
-function inputIsSameAsMemory() {
+function validateInputs() {
     var isSame = true;
-    browser.storage.local.get("days").then(o => {if (daysInput.value == o.days) {isSame = false}});
-    browser.storage.local.get("people").then(o => {if (peopleInput.value == o.people) {isSame = false}});
-    browser.storage.local.get("minor").then(o => {if (minorInput.checked == o.minor) {isSame = false}});
-    browser.storage.local.get("startDay").then(o => {if (dateDayInput.value == o.startDay) {isSame = false}});
-    browser.storage.local.get("startMonth").then(o => {if (dateMonthInput.value == o.startMonth) {isSame = false}});
-    browser.storage.local.get("startYear").then(o => {if (dateYearInput.value == o.startYear) {isSame = false}});
-    return isSame;
+    // Check if input and stored values are the same
+    return browser.storage.local.get().then(o => {
+        if (daysInput.value != o.days ||
+            peopleInput.value != o.people ||
+            minorInput.checked != o.minor ||
+            dateDayInput.value != o.startDay ||
+            dateMonthInput.value != o.startMonth ||
+            dateYearInput.value != o.startYear) 
+        {
+            isSame = false
+        }
+        settingsVerifiedAsValid = isSame;
+    });
 }
 
 function toggleOn() {
-    if (isValid()) {
+    if (settingsVerifiedAsValid) {
         onButton.disabled = true;
         offButton.disabled = false;
         browser.storage.local.set({"scriptEnabled": true});
         statusText.textContent = "ON";
         statusText.className = "toggledOn";
+        browser.browserAction.setIcon({path: "../icons/border-48-on.png"});
     }
 }
 
@@ -76,21 +85,24 @@ function toggleOff() {
     browser.storage.local.set({"scriptEnabled": false});
     statusText.textContent = "OFF";
     statusText.className = "toggledOff";
+    browser.browserAction.setIcon({path: "../icons/border-48.png"});
 }
 
 function init() {
-    browser.storage.local.get("days").then(o => daysInput.value = o.days);
-    browser.storage.local.get("people").then(o => peopleInput.value = o.people);
-    browser.storage.local.get("minor").then(o => minorInput.checked = o.minor);
-    browser.storage.local.get("startDay").then(o => dateDayInput.value = o.startDay);
-    browser.storage.local.get("startMonth").then(o => dateMonthInput.value = o.startMonth);
-    browser.storage.local.get("startYear").then(o => dateYearInput.value = o.startYear);
-    browser.storage.local.get("scriptEnabled").then(o => {
-        if (o.scriptEnabled) {
-            toggleOn();
-        } else {
-            toggleOff();
-        }
+    browser.storage.local.get().then(o => {
+        daysInput.value = o.days
+        peopleInput.value = o.people
+        minorInput.checked = o.minor
+        dateDayInput.value = o.startDay
+        dateMonthInput.value = o.startMonth
+        dateYearInput.value = o.startYear
+        validateInputs().then(() => {
+            if (o.scriptEnabled) {
+                toggleOn();
+            } else {
+                toggleOff();
+            }
+        });
     });
 }
 

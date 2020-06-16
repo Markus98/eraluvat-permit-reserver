@@ -5,7 +5,7 @@ function toBeRunInPageContext (paramObj) {
         var productIds = $(".product-list-item.product-form").toArray().map(e => e.attributes["data-product"].value);
         var storeProductIds = Object.keys(this.eraluvat.STORE.CALENDAR_DATA);
         var validProductIds = productIds.filter(id => storeProductIds.includes(id));
-        var productId = validProductIds[0];
+        var productId = validProductIds[0]; // TODO: Implement selection of type of ticket here. Currently takes first one from top.
         var lengthId = $("select.js-product-ticket.select2-hidden-accessible").find("option").toArray().find(elem => elem.dataset.minLength == daysLength 
             && ( minorPermit == elem.text.includes("(alle 18-v)") ) 
             && elem.dataset.productId == productId).value;
@@ -18,7 +18,6 @@ function toBeRunInPageContext (paramObj) {
     }
     
     function getTicketId(date, productId) {
-        console.log(date);
         var ticketElem = this.eraluvat.STORE.CALENDAR_DATA[productId].find(elem => isSameDate(elem, date));
         return ticketElem[date][0].id;
     }
