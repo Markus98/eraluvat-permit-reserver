@@ -21,22 +21,25 @@
             .toggledOn {
                 color: green;
             }
+            .numberElem {
+                width: 70px;
+            }
         </style>
     </head>
     <body>
         <span>date: </span>
         <div class="dateElem">
             <span>day: </span>
-            <input type="number" id="startTimeDayInput" min="1" max="31">
+            <input type="number" class="numberElem" id="startTimeDayInput" min="1" max="31">
             <span>month: </span>
-            <input type="number" id="startTimeMonthInput" min="1" max = "12">
+            <input type="number" class="numberElem" id="startTimeMonthInput" min="1" max = "12">
             <span>year: </span>
-            <input type="number" id="startTimeYearInput">
+            <input type="number" class="numberElem" id="startTimeYearInput">
         </div>
         <span>days: </span>
-        <input class="dateInput" type="number" id="daysInput" min="1" max="7">
-        <span>people amount: </span>
-        <input type="number" id="peopleInput" min="1">
+        <input class="numberElem" type="number" id="daysInput" min="1" max="7">
+        <span>number of people: </span>
+        <input class="numberElem" type="number" id="peopleInput" min="1">
         <div class="minorElem">
             <span>minor ticket: </span>
             <input type="checkbox" id="minorInput">

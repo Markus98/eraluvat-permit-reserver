@@ -1,9 +1,14 @@
-function toBeRunInPageContext () {
+function toBeRunInPageContext (paramObj) {
     const tempThis = this;
 
     function getRequestString(peopleCount, daysLength, startDate, minorPermit) {
-        var productId = $(".product-list-item.product-form")[0].attributes["data-product"].value;
-        var lengthId = $("select.js-product-ticket.select2-hidden-accessible").find("option").toArray().find(elem => elem.dataset.minLength == daysLength && ( minorPermit == elem.text.includes("(alle 18-v)") )).value
+        var productIds = $(".product-list-item.product-form").toArray().map(e => e.attributes["data-product"].value);
+        var storeProductIds = Object.keys(this.eraluvat.STORE.CALENDAR_DATA);
+        var validProductIds = productIds.filter(id => storeProductIds.includes(id));
+        var productId = validProductIds[0];
+        var lengthId = $("select.js-product-ticket.select2-hidden-accessible").find("option").toArray().find(elem => elem.dataset.minLength == daysLength 
+            && ( minorPermit == elem.text.includes("(alle 18-v)") ) 
+            && elem.dataset.productId == productId).value;
         var categoryId = $("div.item-submit-controls").find("input[name*='category']")[0].value;
         var ticketId = getTicketId(startDate.toISOString().substring(0,10), productId);
 
@@ -13,6 +18,7 @@ function toBeRunInPageContext () {
     }
     
     function getTicketId(date, productId) {
+        console.log(date);
         var ticketElem = this.eraluvat.STORE.CALENDAR_DATA[productId].find(elem => isSameDate(elem, date));
         return ticketElem[date][0].id;
     }
@@ -25,7 +31,7 @@ function toBeRunInPageContext () {
     function getDayInfo(doneFunc) {
         var i = this.eraluvat.app.functions.getFajaxURL({
             slots: 100,
-            beginDate: new Date(Date.UTC(2020, 7)),
+            beginDate: new Date(Date.UTC(paramObj.startYear, paramObj.startMonth-2)),
             productIDArr: [$("section.product-list-item.product-form").data("product")]
         });
         function jsonFunc(e) {
@@ -47,7 +53,10 @@ function toBeRunInPageContext () {
 
     function reserve() {
         function doneFunc() {
-            modifiedAddToCart(getRequestString(1, 5, new Date(Date.UTC(2020, 8, 15)), false));
+            modifiedAddToCart(getRequestString(paramObj.people, 
+                paramObj.days, 
+                new Date(Date.UTC(paramObj.startYear, paramObj.startMonth - 1, paramObj.startDay)), 
+                paramObj.minor));
         }
         getDayInfo(doneFunc);
     }
@@ -55,7 +64,7 @@ function toBeRunInPageContext () {
     reserve();
 }
 
-
+// Needed to run methods defined by the page.
 function runInPageContext (method, ...args) {
     // The stringified method which will be parsed as a function object.
     const stringifiedMethod = method instanceof Function
@@ -81,9 +90,19 @@ function runInPageContext (method, ...args) {
     document.documentElement.prepend(scriptElement);
 };
 
+var scriptHasRan = false;
+
 function onPageLoad() {
-    runInPageContext(toBeRunInPageContext);
+    browser.storage.local.get("scriptEnabled").then(o => {
+        if (!scriptHasRan && o.scriptEnabled) {
+            scriptHasRan = true;
+            browser.storage.local.get().then(params => {
+                runInPageContext(toBeRunInPageContext, params);
+            })
+        }
+    })
 }
+// Run script after page has loaded.
 window.addEventListener('load', onPageLoad);
-// setTimeout(onPageLoad, 2000);
-// onPageLoad();
+// In case the 'load' even isn't emitted, also set a timer
+setTimeout(onPageLoad, 1000);

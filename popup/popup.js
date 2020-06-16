@@ -25,13 +25,13 @@ function onSettingChange() {
         browser.storage.local.set({"startDay": dateDayInput.value});
         browser.storage.local.set({"startMonth": dateMonthInput.value});
         browser.storage.local.set({"startYear": dateYearInput.value});
-        dateDayInput.className = ""
-        dateMonthInput.className = ""
-        dateYearInput.className = ""
+        dateDayInput.className = "numberElem"
+        dateMonthInput.className = "numberElem"
+        dateYearInput.className = "numberElem"
     } else {
-        dateDayInput.className = "error"
-        dateMonthInput.className = "error"
-        dateYearInput.className = "error"
+        dateDayInput.className = "error numberElem"
+        dateMonthInput.className = "error numberElem"
+        dateYearInput.className = "error numberElem"
     }
 
     browser.storage.local.set({"days": daysInput.value});
@@ -86,7 +86,6 @@ function init() {
     browser.storage.local.get("startMonth").then(o => dateMonthInput.value = o.startMonth);
     browser.storage.local.get("startYear").then(o => dateYearInput.value = o.startYear);
     browser.storage.local.get("scriptEnabled").then(o => {
-        console.log(o.scriptEnabled)
         if (o.scriptEnabled) {
             toggleOn();
         } else {
